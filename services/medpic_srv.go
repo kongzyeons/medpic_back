@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/go-playground/validator/v10"
+	"github.com/google/uuid"
 	"go.mongodb.org/mongo-driver/bson"
 )
 
@@ -38,11 +39,6 @@ func (obj medpicServices) Create(drugs []repository.DrugSimiDB) (err error) {
 			},
 			{
 				"$match": bson.M{
-					"label": drugs[i].Label,
-				},
-			},
-			{
-				"$match": bson.M{
 					"color": drugs[i].Color,
 				},
 			},
@@ -56,6 +52,7 @@ func (obj medpicServices) Create(drugs []repository.DrugSimiDB) (err error) {
 			return err
 		}
 
+		dbDrugs[i].DrugID = "durg-" + uuid.New().String()
 		drugs[i].CreateDate = time.Now()
 		drugs[i].UpdateDate = time.Now()
 		drugsInterface = append(drugsInterface, drugs[i])
